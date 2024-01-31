@@ -4,8 +4,9 @@
 
 
 #include <stdio.h>
+#include <limits.h>
 
-#define N 10000
+#define N 5
 
 // size 17K
 // time 0.005s
@@ -16,7 +17,7 @@ int sieve_original(void) {
 
     for(i = 2; i < N; i++)
         if (a[i])
-            for (j = i; i*j < N; j++) a[i*j] = 0;
+            for (j = i; i * j < N; j++) a[i*j] = 0;
 
     for (i = 2; i < N; i++)
         if (a[i]) printf("%4d ", i);
@@ -35,7 +36,7 @@ int sieve_using_chars(void) {
 
     for (i = 2; i < N; i++)
         if (a[i] == '1')
-            for (j = i; i*j < N; j++) a[i*j] = '0';
+            for (j = i; i * j < N; j++) a[i*j] = '0';
 
     for (i = 2; i < N; i++)
         if (a[i] == '1') printf("%4d ", i);
@@ -43,3 +44,21 @@ int sieve_using_chars(void) {
 
     return 0;
 }
+
+// size
+// time
+int sieve_using_bitfields(void) {
+    int i, j, a[N];
+
+    for (i = 2; i < N; i++) a[i] = INT_MAX;
+
+    for (i = 2; i < N; i++)
+	    printf("%x ", a[i] & (1 << (i % 32)));
+	    if (a[i] & (1 << (i % 32)))
+		    for (j = i; i * j < N; i++)
+			    a[i] &= ~(1 << ((i * j) % 32));
+
+
+    return 0;
+}
+
