@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 int easiest_example_of_dynamic_array(void) {
 	int* arr;
@@ -30,10 +31,10 @@ int easiest_example_of_dynamic_array(void) {
 	return 0;
 }
 
-int main(void) {
+int auto_resizable_dynamic_array(void) {
 	int capacity = 16;
 	int size = 0;
-	int char_typed;
+	char char_typed;
 
 	int* arr = (int*) malloc(capacity * sizeof(int));
 
@@ -43,28 +44,31 @@ int main(void) {
 		return 1;
 	}
 
-	// break this loop reading everything as chars
-	// after that try casting the input to int
-	// compare with 'q' char to quit
 	while (1) {
 		if (size == capacity) {
 			capacity *= 2;
 			arr = (int*) realloc(arr, capacity * sizeof(int));
 		}
 
-		int values_read = scanf(" %d", &char_typed);
-		printf("read: %d\n", values_read);
+		if (arr == NULL) {
+			printf("Could not allocate memory\n");
 
-		if (values_read == 1) {
-			arr[size] = char_typed;
-			size++;
+			return 1;
 		}
+
+		scanf(" %c", &char_typed);
+		
+		if (isalpha(char_typed))
+			break;
+
+		arr[size] = atoi(&char_typed);
+		size++;
 	}
 
 	for (int i = 0; i < size; i++) {
 		printf("%d ", arr[i]);
 	}
+	printf("\n");
 
 	return 0;
 }
-
