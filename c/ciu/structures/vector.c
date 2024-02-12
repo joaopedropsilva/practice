@@ -6,6 +6,9 @@
 
 #define __is_full(vec) (vec.__size == vec.__capacity)
 #define __increment_size(vec) vec.__size++
+#define __shift_right(start_index, vec) \
+	for (int i = vec.__size - 1; i >= start_index; i--) \
+		vec.__addr[i + 1] = vec.__addr[i]; \
 // Add error log
 #define __resize(vec) \
 	vec.__capacity *= 2; \
@@ -33,13 +36,33 @@
 		__resize(vec); \
 	vec.__addr[size(vec)] = item; \
 	__increment_size(vec)
+#define insert(index, item, vec) \
+	if(__is_full(vec)) \
+		__resize(vec); \
+	__shift_right(index, vec); \
+	vec.__addr[index] = item; \
+	__increment_size(vec)
+
 
 int main(void) {
 	vector_t (int) a = initialize_vector(int);
 
-	for (int i = 0; i < INITIAL_CAPACITY + 2; i++) {
+	for (int i = 0; i < INITIAL_CAPACITY; i++) {
 		push(i + 1, a);
 	}
+
+	printf("size: %d\n", size(a));
+	printf("capacity: %d\n", capacity(a));
+
+	for (int i = 0; i < size(a); i++)
+		printf("%d ", a.__addr[i]);
+	printf("\n");
+
+	printf("inserting at 11:\n");
+	insert(11, 1000, a);
+
+	printf("size: %d\n", size(a));
+	printf("capacity: %d\n", capacity(a));
 
 	for (int i = 0; i < size(a); i++)
 		printf("%d ", a.__addr[i]);
