@@ -60,30 +60,49 @@
 	__shift_left(index, vec); \
 	__decrement_size(vec); \
 	if (__is_size_a_quarter(vec)) \
-		__resize_by(0.5, vec); \
-
-int main(void) {
-	vector_t (int) a = initialize_vector(int);
-
-	for (int i = 0; i < 6; i++) {
-		push(i + 1, a);
+		__resize_by(0.5, vec)
+#define remove(item, vec) \
+	printf(">> item to remove: %d\n", item); \
+	int i = 0; \
+	while (1) { \
+		if (i == vec.__size - 1) { \
+			break; \
+		} \
+		if (item == vec.__addr[i]) { \
+			printf(">> item found %d\n", vec.__addr[i]); \
+			printf(">> index %d\n", i); \
+			__shift_left(i, vec); \
+			__decrement_size(vec); \
+		} \
+		i++; \
 	}
 
-	printf("size: %d\n", size(a));
-	printf("capacity: %d\n", capacity(a));
+int main(void) {
+	vector_t (int) vec = initialize_vector(int);
+	for (int i = 0; i < 6; i++) {
+		if (i%2 == 0) {
+			push(2, vec);
+		} else {
+			push(i, vec);
+		}
+	}
 
-	for (int i = 0; i < size(a); i++)
-		printf("%d ", at(i, a));
+	// 2,1,2,3,2,5
+	printf("size: %d\n", size(vec));
+	printf("capacity: %d\n", capacity(vec));
+	for (int i = 0; i < size(vec); i++)
+		printf("%d ", at(i, vec));
 	printf("\n");
 
-	printf("deleting\n");
-	delete(size(a) - 1, a);
 
-	for (int i = 0; i < size(a); i++)
-		printf("%d ", at(i, a));
+	printf("removing\n");
+	remove(3, vec);
+
+
+	printf("size: %d\n", size(vec));
+	printf("capacity: %d\n", capacity(vec));
+	for (int i = 0; i < size(vec); i++)
+		printf("%d ", at(i, vec));
 	printf("\n");
-
-	printf("size: %d\n", size(a));
-	printf("capacity: %d\n", capacity(a));
 }
 
