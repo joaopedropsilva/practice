@@ -77,32 +77,35 @@
 		i++; \
 	}
 
-int main(void) {
-	vector_t (int) vec = initialize_vector(int);
-	for (int i = 0; i < 6; i++) {
-		if (i%2 == 0) {
-			push(2, vec);
-		} else {
-			push(i, vec);
-		}
+
+vector_t *vec_create() {
+	vector_t *v = (vector_t *) malloc(sizeof(vector_t));
+
+	v->__addr = (int *) malloc(sizeof(int) * INITIAL_CAPACITY);
+
+	if (v->__addr == NULL) {
+		printf("Could not allocate memory for vector\n");
+		printf("Exiting...\n");
+
+		exit(1);
 	}
 
-	// 2,1,2,3,2,5
-	printf("size: %d\n", size(vec));
-	printf("capacity: %d\n", capacity(vec));
-	for (int i = 0; i < size(vec); i++)
-		printf("%d ", at(i, vec));
-	printf("\n");
+	v->__size = INITIAL_SIZE;
+	v->__capacity = INITIAL_CAPACITY;
 
-
-	printf("removing\n");
-	remove(3, vec);
-
-
-	printf("size: %d\n", size(vec));
-	printf("capacity: %d\n", capacity(vec));
-	for (int i = 0; i < size(vec); i++)
-		printf("%d ", at(i, vec));
-	printf("\n");
+	return v;
 }
+
+int vec_size(vector_t *vecptr) { return vecptr->__size; }
+
+int vec_capacity(vector_t *vecptr) { return vecptr->__capacity; }
+
+int vec_is_empty(vector_t *vecptr) { return (vecptr->__size == 0); }
+
+int vec_at(vector_t *vecptr, int index) { return ((index >= vecptr->__size) ? -1 : vecptr->__addr[index]); }
+
+void vec_push(vector_t *vecptr, int item) {
+	if (__is_full)
+		__resize_by(2, vecptr);
+}; 
 
