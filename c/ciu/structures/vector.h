@@ -6,6 +6,8 @@
 
 const int INITIAL_CAPACITY = 16;
 const int INITIAL_SIZE = 0;
+const int GROWTH_FACTOR = 2;
+const float SHRINK_FACTOR = 0.5;
 
 typedef struct {
 	int* __addr;
