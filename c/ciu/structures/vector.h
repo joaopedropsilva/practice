@@ -27,6 +27,8 @@ void vec_prepend(vector_t *vecptr, int item);
 int vec_pop(vector_t *vecptr); 
 void vec_delete(vector_t *vecptr, int index); 
 void vec_remove(vector_t *vecptr, int item); 
+int vec_find(vector_t *vecptr, int item); 
+void vec_put(vector_t *vecptr, int index, int item); 
 
 #endif
 
