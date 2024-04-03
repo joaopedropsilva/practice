@@ -1,3 +1,8 @@
 # practice
 
-Language practing problems repo
+Language based practing repo
+
+## Repo Structure
+
+lang
+|-resource (course, study agenda, book, coding platform, ...)
