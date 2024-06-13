@@ -2,7 +2,7 @@ from math import inf
 from typing import List
 
 
-def bfs(graph: dict, source_vertex: int) -> List[int]:
+def bfs(graph: dict, source_vertex: int) -> List[float]:
     cost = [inf] * len(graph)
     cost[source_vertex] = 0
 
