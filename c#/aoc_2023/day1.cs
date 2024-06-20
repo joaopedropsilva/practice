@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 
 namespace Day1 {
@@ -11,30 +13,31 @@ namespace Day1 {
             return File.ReadAllLines(FilePath);
         } 
 
-        public static int Solve() {
-            List<char> numbersInLine = new List<char>();
+        public static void Main(string[] args) {
+            List<char> numbersInLine;
             int totalSum = 0;
 
             foreach (string line in AllLines) {
+                numbersInLine = new List<char>();
+
                 foreach (char character in line) 
-                    if (Char.IsLetterOrDigit(character))
+                    if (Char.IsDigit(character))
                         numbersInLine.Add(character);
 
-                 int numberForLine;
-                    int.TryParse(
-                        new String(numbersInLine.First() + numbersInLine.Last()),
-                        out numberForLine
-                    );
+                if (!numbersInLine.Any())
+                    continue;
 
-                if (typeof(numberForLine) == int)
-                    totalSum += numberForLine;
+                int n;
+                int.TryParse(
+                    $"{numbersInLine.First()}{numbersInLine.Last()}",
+                    out n
+                );
+
+                if (n.GetType() == typeof(int))
+                    totalSum += n;
             }
 
-            return totalSum;
-
-        }
-
-        public static void Main(string[] args) {
+            Console.WriteLine(totalSum);
         }
     }
 }
