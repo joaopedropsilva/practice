@@ -1,6 +1,6 @@
 # practice
 
-Language based practing repo
+Practicing repo
 
 ## Repo Structure
 
