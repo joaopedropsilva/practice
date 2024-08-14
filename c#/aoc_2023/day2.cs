@@ -1,5 +1,6 @@
 namespace Day2 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
     public class Program {
@@ -19,21 +20,47 @@ namespace Day2 {
                     gameInfo[i] = sampleSplit[i].Trim();
                 }
 
-                int gameId;
-                int.TryParse(gameInfo[0].Split()[1], out gameId);
+                int id;
+                int.TryParse(gameInfo[0].Split()[1], out id);
 
-                int j = 0;
-                while (j < gameInfo[1].Length) {
-                    int hi = gameInfo[1].IndexOf(";");
-                    string target = gameInfo[1].Substring(j, hi);
-
-                    Console.WriteLine(target);
-                    gameInfo[1] = gameInfo[1].Remove(j, hi);
-
-                    j = hi;
+                string[] rounds = gameInfo[1].Split(";");
+                for (int i = 0; i < rounds.Length; i++) {
+                    rounds[i] = rounds[i].Trim();
                 }
 
-                Console.WriteLine(gameInfo[1]);
+
+
+                // check if possible for each round, if not break the loop and continue
+                foreach (string r in rounds) {
+                    string[] rInfo = r.Split(",");
+
+                    List<KeyValuePair<string, int>> cubesAndNumber =
+                        new List<KeyValuePair<string, int>>();
+                    for (int i = 0; i < rInfo.Length; i++) {
+                        rInfo[i] = rInfo[i].Trim();
+                    }
+
+                    foreach (string ri in rInfo) {
+                        int nCubes;
+                        int.TryParse(ri[0].ToString(), out nCubes);
+
+                        cubesAndNumber
+                            .Add(
+                                new KeyValuePair<string, int>
+                                (
+                                    ri.Substring(2),
+                                    nCubes
+                                )
+                            );
+
+                        // Trim kvp keys
+                        // Check output, seems strange
+                        cubesAndNumber
+                            .ForEach(cn => {
+                                Console.WriteLine(cn.ToString());
+                            });
+                    }
+                }
 
                 break;
             }
