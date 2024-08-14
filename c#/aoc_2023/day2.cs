@@ -8,9 +8,24 @@ namespace Day2 {
 
         public static void Main() {
             string[] samples = File.ReadAllLines(InputPath);
-            int nRedCubes = 12;
-            int nGreenCubes = 13;
-            int nBlueCubes = 14;
+            List<int> validGameIds = new List<int>();
+
+            string[] cubeColors = {"red", "green", "blue"};
+            int[] cubeAmountLimit = {12, 13, 14};
+
+            List<KeyValuePair<string, int>> cubeLimits =
+                new List<KeyValuePair<string, int>>();
+
+            for (int i = 0; i < cubeColors.Length; i++) {
+                cubeLimits.Add(
+                    new KeyValuePair<string, int>
+                    (
+                        cubeColors[i],
+                        cubeAmountLimit[i]
+                    )
+                );
+            }
+
 
             foreach (string sample in samples) {
                 string[] sampleSplit = sample.Split(':');
@@ -28,9 +43,6 @@ namespace Day2 {
                     rounds[i] = rounds[i].Trim();
                 }
 
-
-
-                // check if possible for each round, if not break the loop and continue
                 foreach (string r in rounds) {
                     string[] rInfo = r.Split(",");
 
@@ -42,24 +54,34 @@ namespace Day2 {
 
                     foreach (string ri in rInfo) {
                         int nCubes;
-                        int.TryParse(ri[0].ToString(), out nCubes);
+                        int.TryParse(
+                                ri.Substring(0, ri.IndexOf(" ")).ToString(),
+                                out nCubes
+                            );
 
                         cubesAndNumber
                             .Add(
                                 new KeyValuePair<string, int>
                                 (
-                                    ri.Substring(2),
+                                    ri.Substring(ri.IndexOf(" ")).Trim(),
                                     nCubes
                                 )
                             );
-
-                        // Trim kvp keys
-                        // Check output, seems strange
-                        cubesAndNumber
-                            .ForEach(cn => {
-                                Console.WriteLine(cn.ToString());
-                            });
                     }
+
+                    cubesAndNumber
+                        .ForEach(cn => {
+                                KeyValuePair<string, int> currentCube =
+                                    cubesAndNumber.Find(x => x.Key == cn.Key);
+                                KeyValuePair<string, int> limit =
+                                    cubeLimits.Find(x => x.Key == cn.Key);
+
+                                Console.WriteLine(currentCube.Value);
+                                if (currentCube.Value <= limit.Value)
+                                    validGameIds.Add(id);
+                        });
+
+                    cubesAndNumber.Clear();
                 }
 
                 break;
