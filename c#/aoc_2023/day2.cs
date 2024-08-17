@@ -7,17 +7,14 @@ namespace Day2 {
         private static string InputPath = "./inputs/two";
 
         public static void Main() {
-            string[] samples = File.ReadAllLines(InputPath);
-            List<int> validGameIds = new List<int>();
-
             string[] cubeColors = {"red", "green", "blue"};
             int[] cubeAmountLimit = {12, 13, 14};
-
-            List<KeyValuePair<string, int>> cubeLimits =
+            HashSet<int> validGameIds = new HashSet<int>();
+            List<KeyValuePair<string, int>> maxAmountByColor =
                 new List<KeyValuePair<string, int>>();
 
             for (int i = 0; i < cubeColors.Length; i++) {
-                cubeLimits.Add(
+                maxAmountByColor.Add(
                     new KeyValuePair<string, int>
                     (
                         cubeColors[i],
@@ -26,10 +23,12 @@ namespace Day2 {
                 );
             }
 
-
+            string[] samples = File.ReadAllLines(InputPath);
             foreach (string sample in samples) {
+                // sample processing
                 string[] sampleSplit = sample.Split(':');
                 string[] gameInfo = new string[(int)sampleSplit.Length];
+                bool isGameValid = true;
 
                 for (int i = 0; i < gameInfo.Length; i++) {
                     gameInfo[i] = sampleSplit[i].Trim();
@@ -43,49 +42,59 @@ namespace Day2 {
                     rounds[i] = rounds[i].Trim();
                 }
 
+                // round processing
+                List<KeyValuePair<string, int>> colorAndNumber =
+                    new List<KeyValuePair<string, int>>();
                 foreach (string r in rounds) {
-                    string[] rInfo = r.Split(",");
+                    string[] roundColorsAndNumber = r.Split(",");
 
-                    List<KeyValuePair<string, int>> cubesAndNumber =
-                        new List<KeyValuePair<string, int>>();
-                    for (int i = 0; i < rInfo.Length; i++) {
-                        rInfo[i] = rInfo[i].Trim();
+                    for (int i = 0; i < roundColorsAndNumber.Length; i++) {
+                        roundColorsAndNumber[i] =
+                            roundColorsAndNumber[i].Trim();
                     }
 
-                    foreach (string ri in rInfo) {
+                    foreach (string rcn in roundColorsAndNumber) {
                         int nCubes;
                         int.TryParse(
-                                ri.Substring(0, ri.IndexOf(" ")).ToString(),
+                                rcn.Substring(0, rcn.IndexOf(" ")).ToString(),
                                 out nCubes
                             );
 
-                        cubesAndNumber
+                        colorAndNumber
                             .Add(
                                 new KeyValuePair<string, int>
                                 (
-                                    ri.Substring(ri.IndexOf(" ")).Trim(),
+                                    rcn.Substring(rcn.IndexOf(" ")).Trim(),
                                     nCubes
                                 )
                             );
                     }
 
-                    cubesAndNumber
-                        .ForEach(cn => {
-                                KeyValuePair<string, int> currentCube =
-                                    cubesAndNumber.Find(x => x.Key == cn.Key);
-                                KeyValuePair<string, int> limit =
-                                    cubeLimits.Find(x => x.Key == cn.Key);
+                    foreach (KeyValuePair<string, int> cn in colorAndNumber) {
+                        KeyValuePair<string, int> maxFromCurrentColor =
+                            maxAmountByColor.Find(c => c.Key == cn.Key); 
 
-                                Console.WriteLine(currentCube.Value);
-                                if (currentCube.Value <= limit.Value)
-                                    validGameIds.Add(id);
-                        });
+                        if (cn.Value > maxFromCurrentColor.Value) {
+                            isGameValid = false;
+                            break;
+                        }
+                    }
 
-                    cubesAndNumber.Clear();
+                    colorAndNumber.Clear();
+
+                    if (!isGameValid)
+                        break;
+
+                    validGameIds.Add(id);
                 }
-
-                break;
             }
+
+            int validGameIdsSum = 0;
+            foreach (int id in validGameIds) {
+                validGameIdsSum += id;
+            }
+
+            Console.WriteLine("Sum of valid game ids: {0}", validGameIdsSum);
         }
     }
 }
