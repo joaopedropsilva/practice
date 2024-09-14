@@ -2,9 +2,7 @@
 
 Practicing repo
 
-## Repo Structure
-
 ```
-lang
+lang/tool
 |-resource (course, study agenda, book, coding platform, ...)
 ```
