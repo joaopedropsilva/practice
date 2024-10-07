@@ -1,11 +1,16 @@
-def count_call(calls):
+def count_call(info):
     def wrapper(func):
         def func_caller():
             # using nonlocal does not work
             # calls is passed by value not
             # by reference probably
-            nonlocal calls
-            calls += 1
+            #
+            # nonlocal calls
+            # calls += 1
+
+            # even passing a dict
+            #  this is not possible
+            info["calls"] += 1
 
             return func()
         return func_caller
@@ -13,11 +18,25 @@ def count_call(calls):
     return wrapper
 
 
+def cc(func):
+    def wrp():
+        # pass by reference here and it should work
+        def caller(calls):
+            return func()
+
+        return caller
+
+    return wrp
+
 if __name__ == "__main__":
-    calls = 0
+    info  = {"calls": 0}
     rec = 0
 
-    @count_call(calls)
+    #@count_call(info)
+    @cc
+    def prepare():
+        pass
+
     def recurse():
         global rec
         if rec == 5:
@@ -26,7 +45,9 @@ if __name__ == "__main__":
         rec += 1
         return recurse()
 
-    print(f"calls: {calls}")
-    print(f"total: {recurse()}")
+    print(recurse())
+
+    #print(f"calls: {info["calls"]}")
+    #print(f"total: {recurse()}")
 
 
